@@ -4,23 +4,33 @@ import Button from "react-bootstrap/Button";
 
 class AppointmentTable extends React.Component {
   renderAppointments = () => {
-    return this.props.appointments.map((a) => {
+    const orderedAppointments = this.props.appointments.sort((a, b) => {
+      if (a.dateTime > b.dateTime) return 1;
+      else if (a.dateTime < b.dateTime) return -1;
+      else return 0;
+    });
+
+    return orderedAppointments.map((a) => {
       return (
-        <tr>
-          <td>{a.date}</td>
-          <td>{a.time}</td>
+        <tr key={a.id}>
+          <td>{a.dateTime.toLocaleDateString()}</td>
+          <td>{a.dateTime.toLocaleTimeString()}</td>
           <td>{a.location}</td>
           <td>{a.description}</td>
           <td className="text-center">
             <Button
               onClick={() => this.props.editAppointment(a)}
               size="sm"
-              variant="outline-secondary"
+              variant="outline-light"
             >
               Edit
             </Button>{" "}
-            <Button size="sm" variant="outline-danger">
-              Delete
+            <Button
+              onClick={() => this.props.cancelAppointment(a)}
+              size="sm"
+              variant="outline-danger"
+            >
+              Cancel
             </Button>
           </td>
         </tr>

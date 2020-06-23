@@ -5,43 +5,42 @@ import Button from "react-bootstrap/Button";
 import AppointmentTable from "./AppointmentTable";
 import AddAppointmentModal from "./AddAppointmentModal";
 import EditAppointmentModal from "./EditAppointmentModal";
+import CancelAppointmentModal from "./CancelAppointmentModal";
 
 const initialState = {
   showAddModal: false,
+  showEditModal: false,
+  showCancelModal: false,
   appointmentToEdit: {},
+  appointmentToCancel: {},
   appointmentData: [
     {
       id: 1,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
+      dateTime: new Date(),
       location: "Some Location",
       description: "Appointment to review code",
     },
     {
       id: 2,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
+      dateTime: new Date(),
       location: "Some Location",
       description: "Appointment to review code",
     },
     {
       id: 3,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
+      dateTime: new Date(),
       location: "Some Location",
       description: "Appointment to review code",
     },
     {
       id: 4,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
+      dateTime: new Date(),
       location: "Some Location",
       description: "Appointment to review code",
     },
     {
       id: 5,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
+      dateTime: new Date(),
       location: "Some Location",
       description: "Appointment to review code",
     },
@@ -51,57 +50,86 @@ const initialState = {
 class App extends React.Component {
   state = initialState;
 
-  saveAppointment = (date, location, description) => {
-    this.setState({
-      showAddModal: false,
-      appointmentData: this.state.appointmentData.push({
-        date: new Date(date).toLocaleDateString(),
-        time: new Date(date).toLocaleTimeString(),
-        location,
-        description,
-      }),
-    });
-  };
-
-  editAppointment = (appointment) => {
+  showEditAppointmentModal = (appointment) => {
     this.setState({
       showEditModal: true,
       appointmentToEdit: appointment,
     });
   };
 
-  saveEditedAppointment = (date, location, description, id) => {
-    const appointment = this.state.appointmentData.find((a) => a.id == id);
-
-    const updatedAppointment = {
-      id: id,
-      date: date ? new Date(date).toLocaleDateString() : appointment.date,
-      time: date ? new Date(date).toLocaleTimeString() : appointment.time,
-      location: location ? location : appointment.location,
-      description: description ? description : appointment.description,
-    };
-
-    const updatedAppointments = this.state.appointmentData.map((a) => {
-      return a.id == appointment.id ? updatedAppointment : a;
+  showCancelAppointmentMondal = (appointment) => {
+    this.setState({
+      showCancelModal: true,
+      appointmentToCancel: appointment,
     });
-
-    this.setState({ appointmentData: updatedAppointments });
   };
 
-  render() {
+  saveAppointment = (appointment) => {
+    this.setState({
+      showAddModal: false,
+      appointmentData: this.state.appointmentData.concat(appointment),
+    });
+  };
+
+  saveEditedAppointment = (updatedAppointment) => {
+    const updatedAppointments = this.state.appointmentData.map((a) => {
+      return a.id == updatedAppointment.id ? updatedAppointment : a;
+    });
+
+    this.setState({
+      appointmentData: updatedAppointments,
+      showEditModal: false,
+    });
+  };
+
+  cancelAppointment = (appointment) => {
+    console.log(appointment);
+    this.setState({
+      showCancelModal: false,
+      appointmentData: this.state.appointmentData.filter(
+        (ad) => ad.id != appointment.id
+      ),
+    });
+  };
+
+  getNextIdNumber = () => {
+    const idArray = Array.from(this.state.appointmentData, (ad) => ad.id);
+    return Math.max(...idArray, 0) + 1;
+  };
+
+  renderModals = () => {
     return (
-      <div className="container mt-3">
+      <>
         <EditAppointmentModal
           show={this.state.showEditModal}
-          close={() => this.setState({ showEditModal: false })}
-          appointment={this.state.appointmentToEdit}
+          close={() =>
+            this.setState({ showEditModal: false, appointmentToEdit: {} })
+          }
+          appointmentToEdit={this.state.appointmentToEdit}
           saveEditedAppointment={this.saveEditedAppointment}
         />
         <AddAppointmentModal
           show={this.state.showAddModal}
           close={() => this.setState({ showAddModal: false })}
           saveAppointment={this.saveAppointment}
+          nextId={this.getNextIdNumber()}
         />
+        <CancelAppointmentModal
+          show={this.state.showCancelModal}
+          close={() =>
+            this.setState({ showCancelModal: false, appointmentToCancel: {} })
+          }
+          appointmentToCancel={this.state.appointmentToCancel}
+          cancelAppointment={this.cancelAppointment}
+        />
+      </>
+    );
+  };
+
+  render() {
+    return (
+      <div className="container mt-3">
+        {this.renderModals()}
         <Card bg="dark" text="white">
           <Card.Header>
             <h4>
@@ -118,7 +146,8 @@ class App extends React.Component {
 
             <Card.Body>
               <AppointmentTable
-                editAppointment={this.editAppointment}
+                editAppointment={this.showEditAppointmentModal}
+                cancelAppointment={this.showCancelAppointmentMondal}
                 appointments={this.state.appointmentData}
               />
             </Card.Body>
