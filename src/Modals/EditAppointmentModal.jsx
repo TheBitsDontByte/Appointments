@@ -12,17 +12,21 @@ const EditAppointmentModal = (props) => {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   const clearValuesOnShow = () => {
     setDate(null);
     setLocation("");
     setDescription("");
+    setErrorMessage("");
+    setDisabled(false);
   };
 
   const dataIsValid = () => location || date || description;
 
   const createAppointmentAndSave = () => {
     setErrorMessage("");
+    setDisabled(true);
 
     if (dataIsValid()) {
       var updatedAppointment = {
@@ -36,6 +40,7 @@ const EditAppointmentModal = (props) => {
 
       props.saveEditedAppointment(updatedAppointment);
     } else {
+      setDisabled(false);
       setErrorMessage(
         "You have to enter some new value to update an appointment"
       );
@@ -58,6 +63,13 @@ const EditAppointmentModal = (props) => {
         <Row>
           <Col>
             <h4>Original Appointment</h4>
+          </Col>
+          <Col>
+            <h4>Updates</h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
             <AppointmentForm
               disabled={true}
               date={props.appointmentToEdit.dateTime}
@@ -66,7 +78,6 @@ const EditAppointmentModal = (props) => {
             />
           </Col>
           <Col>
-            <h4>Updates</h4>
             <AppointmentForm
               disabled={false}
               date={date}
@@ -80,12 +91,17 @@ const EditAppointmentModal = (props) => {
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={props.close}>
-          Cancel
+        <Button
+          variant="outline-secondary"
+          onClick={props.close}
+          disabled={disabled}
+        >
+          Close
         </Button>
         <Button
           variant="outline-primary"
           onClick={() => createAppointmentAndSave()}
+          disabled={disabled}
         >
           Update
         </Button>

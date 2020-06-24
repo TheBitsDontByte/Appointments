@@ -10,11 +10,14 @@ const AddAppointmentModal = (props) => {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   const clearValuesOnShow = () => {
     setDate(null);
     setLocation("");
     setDescription("");
+    setErrorMessage("");
+    setDisabled(false);
   };
 
   const dataIsValid = () => {
@@ -25,11 +28,13 @@ const AddAppointmentModal = (props) => {
     else if (!description)
       setErrorMessage("A description is required for an appointment");
 
+    setDisabled(false);
     return false;
   };
 
   const onSaveClick = () => {
     setErrorMessage("");
+    setDisabled(true);
 
     if (dataIsValid()) {
       var newAppointment = {
@@ -65,10 +70,18 @@ const AddAppointmentModal = (props) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={props.close}>
-          Cancel
+        <Button
+          variant="outline-secondary"
+          onClick={props.close}
+          disabled={disabled}
+        >
+          Close
         </Button>
-        <Button variant="outline-primary" onClick={() => onSaveClick()}>
+        <Button
+          variant="outline-primary"
+          disabled={disabled}
+          onClick={() => onSaveClick()}
+        >
           Save
         </Button>
       </Modal.Footer>
