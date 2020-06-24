@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Coding Challenge Super Appointment Scheduler™
+## Coding Challenge Appointment Scheduler
 
 A simple scheduling site, built according to the following criteria:
 
