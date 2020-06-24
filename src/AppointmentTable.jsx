@@ -33,7 +33,7 @@ const AppointmentTable = (props) => {
             <Button
               onClick={() => props.cancelAppointment(a)}
               size="sm"
-              variant="outline-danger"
+              variant="outline-secondary"
             >
               Cancel
             </Button>
@@ -54,7 +54,15 @@ const AppointmentTable = (props) => {
           <th></th>
         </tr>
       </thead>
-      <tbody>{renderAppointments()}</tbody>
+      <tbody>
+        {props.appointments.length > 0 ? (
+          renderAppointments()
+        ) : (
+          <tr className="text-center">
+            <td colSpan="5">Your Schedule Is Currently Empty</td>
+          </tr>
+        )}
+      </tbody>
     </Table>
   );
 };
