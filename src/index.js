@@ -1,5 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import AppointmentScheduler from "./AppointmentScheduler";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<AppointmentScheduler />, document.getElementById("root"));
