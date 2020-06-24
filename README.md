@@ -10,7 +10,11 @@ A simple scheduling site, built according to the following criteria:
 - cancel appointments
 
 <br />
-After cloning the project to your local machine, navigatge to the appropriate directory and run with
+Clone the project into a parent directory with
+
+### `git clone https://github.com/TheBitsDontByte/Appointments.git`
+
+After cloning the project, navigatge to the appropriate directory and run with
 
 ### `npm install`
 
