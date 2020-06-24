@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 import AppointmentTable from "./AppointmentTable";
-import AddAppointmentModal from "./AddAppointmentModal";
-import EditAppointmentModal from "./EditAppointmentModal";
-import CancelAppointmentModal from "./CancelAppointmentModal";
+import AddAppointmentModal from "./Modals/AddAppointmentModal";
+import EditAppointmentModal from "./Modals/EditAppointmentModal";
+import CancelAppointmentModal from "./Modals/CancelAppointmentModal";
 
 const initialState = {
   showAddModal: false,
@@ -128,7 +128,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container mt-3">
+      <div className="container-fluid mt-3">
         {this.renderModals()}
         <Card bg="dark" text="white">
           <Card.Header>
