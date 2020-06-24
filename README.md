@@ -10,7 +10,7 @@ A simple scheduling site, built according to the following criteria:
 - cancel appointments
 
 <br />
-After cloning the project to your local machine, you can run with
+After cloning the project to your local machine, navigatge to the appropriate directory and run with
 
 ### `npm start`
 
