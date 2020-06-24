@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { Row, Col } from "react-bootstrap";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 
 import AppointmentForm from "./AppointmentForm";
 
@@ -9,6 +11,7 @@ const EditAppointmentModal = (props) => {
   const [date, setDate] = useState(null);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const clearValuesOnShow = () => {
     setDate(null);
@@ -16,17 +19,27 @@ const EditAppointmentModal = (props) => {
     setDescription("");
   };
 
-  const createAppointmentAndSave = () => {
-    var updatedAppointment = {
-      id: props.appointmentToEdit.id,
-      dateTime: date ? date : props.appointmentToEdit.dateTime,
-      location: location ? location : props.appointmentToEdit.location,
-      description: description
-        ? description
-        : props.appointmentToEdit.description,
-    };
+  const dataIsValid = () => location || date || description;
 
-    props.saveEditedAppointment(updatedAppointment);
+  const createAppointmentAndSave = () => {
+    setErrorMessage("");
+
+    if (dataIsValid()) {
+      var updatedAppointment = {
+        id: props.appointmentToEdit.id,
+        dateTime: date ? date : props.appointmentToEdit.dateTime,
+        location: location ? location : props.appointmentToEdit.location,
+        description: description
+          ? description
+          : props.appointmentToEdit.description,
+      };
+
+      props.saveEditedAppointment(updatedAppointment);
+    } else {
+      setErrorMessage(
+        "You have to enter some new value to update an appointment"
+      );
+    }
   };
 
   return (
@@ -41,6 +54,7 @@ const EditAppointmentModal = (props) => {
         <Modal.Title>Edit An Appointment</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : null}
         <Row>
           <Col>
             <h4>Original Appointment</h4>
