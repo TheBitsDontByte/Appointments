@@ -12,6 +12,8 @@ A simple scheduling site, built according to the following criteria:
 <br />
 After cloning the project to your local machine, navigatge to the appropriate directory and run with
 
+### `npm install`
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
