@@ -1,11 +1,13 @@
 import React from "react";
+
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
-import AppointmentTable from "./AppointmentTable";
 import AddAppointmentModal from "./Modals/AddAppointmentModal";
 import EditAppointmentModal from "./Modals/EditAppointmentModal";
 import CancelAppointmentModal from "./Modals/CancelAppointmentModal";
+import { mockAppointmentData, saveAppointment } from "./MockPersistence";
+import AppointmentTable from "./AppointmentTable";
 
 const initialState = {
   showAddModal: false,
@@ -13,42 +15,16 @@ const initialState = {
   showCancelModal: false,
   appointmentToEdit: {},
   appointmentToCancel: {},
-  appointmentData: [
-    {
-      id: 1,
-      dateTime: new Date(),
-      location: "Some Location",
-      description: "Appointment to review code",
-    },
-    {
-      id: 2,
-      dateTime: new Date(),
-      location: "Some Location",
-      description: "Appointment to review code",
-    },
-    {
-      id: 3,
-      dateTime: new Date(),
-      location: "Some Location",
-      description: "Appointment to review code",
-    },
-    {
-      id: 4,
-      dateTime: new Date(),
-      location: "Some Location",
-      description: "Appointment to review code",
-    },
-    {
-      id: 5,
-      dateTime: new Date(),
-      location: "Some Location",
-      description: "Appointment to review code",
-    },
-  ],
+  appointmentData: [],
 };
 
 class App extends React.Component {
   state = initialState;
+
+  componentDidMount() {
+    this.setState({ appointmentData: mockAppointmentData });
+    console.log(this.state);
+  }
 
   showEditAppointmentModal = (appointment) => {
     this.setState({
@@ -65,15 +41,19 @@ class App extends React.Component {
   };
 
   saveAppointment = (appointment) => {
+    console.log(appointment);
+
+    const updatedAppointments = saveAppointment(appointment);
+    console.log(updatedAppointments);
     this.setState({
       showAddModal: false,
-      appointmentData: this.state.appointmentData.concat(appointment),
+      appointmentData: updatedAppointments,
     });
   };
 
   saveEditedAppointment = (updatedAppointment) => {
     const updatedAppointments = this.state.appointmentData.map((a) => {
-      return a.id == updatedAppointment.id ? updatedAppointment : a;
+      return a.id === updatedAppointment.id ? updatedAppointment : a;
     });
 
     this.setState({
@@ -83,11 +63,10 @@ class App extends React.Component {
   };
 
   cancelAppointment = (appointment) => {
-    console.log(appointment);
     this.setState({
       showCancelModal: false,
       appointmentData: this.state.appointmentData.filter(
-        (ad) => ad.id != appointment.id
+        (ad) => ad.id !== appointment.id
       ),
     });
   };
@@ -135,7 +114,7 @@ class App extends React.Component {
             <h4>
               Coding Challenge Super Appointment Scheduler™
               <Button
-                variant="outline-success"
+                variant="outline-light"
                 size="sm"
                 style={{ float: "right" }}
                 onClick={() => this.setState({ showAddModal: true })}

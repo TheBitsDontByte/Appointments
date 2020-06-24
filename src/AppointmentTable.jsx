@@ -14,7 +14,12 @@ const AppointmentTable = (props) => {
       return (
         <tr key={a.id}>
           <td>{a.dateTime.toLocaleDateString()}</td>
-          <td>{a.dateTime.toLocaleTimeString()}</td>
+          <td>
+            {a.dateTime.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </td>
           <td>{a.location}</td>
           <td>{a.description}</td>
           <td className="text-center">
