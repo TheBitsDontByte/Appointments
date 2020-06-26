@@ -90,6 +90,7 @@ class AppointmentScheduler extends React.Component {
         <AddAppointmentModal
           show={this.state.showAddModal}
           close={() => this.setState({ showAddModal: false })}
+          allAppointments={this.state.appointmentData}
           saveAppointment={this.saveAppointment}
           nextId={this.getNextIdNumber()}
         />

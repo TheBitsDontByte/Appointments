@@ -2,7 +2,6 @@ import React from "react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import Form from "react-bootstrap/Form";
 
 const AppointmentForm = (props) => {
@@ -15,6 +14,7 @@ const AppointmentForm = (props) => {
             disabled={props.disabled}
             popperPlacement="right"
             minDate={new Date()}
+            onChangeRaw={(e) => e.preventDefault()}
             className="form-control"
             selected={props.date}
             onChange={(date) => props.setDate(date)}

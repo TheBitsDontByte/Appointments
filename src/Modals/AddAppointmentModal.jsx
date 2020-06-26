@@ -20,13 +20,25 @@ const AddAppointmentModal = (props) => {
     setDisabled(false);
   };
 
+  const convertDateToComparable = (date) =>
+    date.toLocaleDateString() + date.toLocaleTimeString();
+
+  const checkForConflictingDates = (allAppointments) =>
+    allAppointments
+      .map((a) => convertDateToComparable(a.dateTime))
+      .includes(convertDateToComparable(date));
+
   const dataIsValid = () => {
-    if (date && location && description) return true;
+    const conflictingDates = checkForConflictingDates(props.allAppointments);
+
+    if (date && location && description && !conflictingDates) return true;
     else if (!date) setErrorMessage("A date is required for an appointment");
     else if (!location)
       setErrorMessage("A location is required for an appointment");
     else if (!description)
       setErrorMessage("A description is required for an appointment");
+    else if (conflictingDates)
+      setErrorMessage("An appointment is already scheduled for that time");
 
     setDisabled(false);
     return false;
